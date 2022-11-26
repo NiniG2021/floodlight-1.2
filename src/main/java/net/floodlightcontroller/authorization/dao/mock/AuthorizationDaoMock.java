@@ -11,6 +11,9 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         if (ip.equals("10.0.0.2"))
             return "201888888";
 
+        if (ip.equals("10.0.0.4"))
+            return "201899998";
+
         return null;
     }
 
@@ -30,6 +33,9 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return true;
 
         if (user.equals("201888888"))
+            return false;
+
+        if (user.equals("201899998"))
             return false;
 
         return false;

@@ -6,7 +6,7 @@ public class AuthenticationDaoMock implements AuthenticationDao {
     @Override
     public boolean verifyAuthentication(String ip, String mac) {
 
-        if (ip.equals("10.0.0.1") || ip.equals("10.0.0.2"))
+        if (ip.equals("10.0.0.1") || ip.equals("10.0.0.2") || ip.equals("10.0.0.4"))
             return true;
 
         return false;
