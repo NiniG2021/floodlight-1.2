@@ -81,6 +81,9 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
 
             String user = authorizationDao.getUserByIp(ipv4.getSourceAddress().toString());
             String resourceId = authorizationDao.getResourceIdByIp(ipv4.getDestinationAddress().toString());
+
+            logger.info(String.format("user: %s - resourceId: %s ", user, resourceId));
+
             boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
 
 
