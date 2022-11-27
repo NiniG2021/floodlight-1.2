@@ -60,9 +60,6 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
                 IFloodlightProviderService.bcStore.get(cntx,
                         IFloodlightProviderService.CONTEXT_PI_PAYLOAD);
 
-        System.out.println(eth);
-        System.out.println("estamos aqui");
-
         // MacAddress srcMac = eth.getSourceMACAddress();
         // VlanVid vlanId = VlanVid.ofVlan(eth.getVlanID());
 
@@ -78,6 +75,9 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
                 // no hace nada
               //  return Command.STOP;
             //}
+
+            logger.info(String.format("ip_src: %s - ip_dst: %s ",
+                    ipv4.getSourceAddress().toString(), ipv4.getDestinationAddress().toString()));
 
             String user = authorizationDao.getUserByIp(ipv4.getSourceAddress().toString());
             String resourceId = authorizationDao.getResourceIdByIp(ipv4.getDestinationAddress().toString());
