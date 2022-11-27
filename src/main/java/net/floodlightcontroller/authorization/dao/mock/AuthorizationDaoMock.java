@@ -6,11 +6,11 @@ public class AuthorizationDaoMock implements AuthorizationDao {
     @Override
     public String getUserByIp(String ip) {
         if (ip.equals("10.0.0.1")){
-            return "201505050";
+            return "20150505";
         }
 
         if (ip.equals("10.0.0.2")){
-            return "201888888";
+            return "20188888";
         }
 
 
@@ -32,9 +32,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
     @Override
     public boolean isThisUserAuthorizedForThisResource(String user, String resourceId) {
 
-        if (user.equals("201505050")){
-            return true;
+        if (user == null) {
+            return false;
         }
-        return false;
+
+        return user.equals("20150505");
     }
 }
