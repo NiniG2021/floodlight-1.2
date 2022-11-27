@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Set;
 import net.floodlightcontroller.packet.Ethernet;
+import org.projectfloodlight.openflow.types.EthType;
+import org.projectfloodlight.openflow.types.MacAddress;
+import org.projectfloodlight.openflow.types.VlanVid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +39,8 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
 
     @Override
     public String getName() {
-        return "Authorization";
+        System.out.printf("entro a authorization");
+        return "authorization";
     }
 
     @Override
@@ -55,27 +59,39 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
         Ethernet eth =
                 IFloodlightProviderService.bcStore.get(cntx,
                         IFloodlightProviderService.CONTEXT_PI_PAYLOAD);
-        IPv4 iPv4 = (IPv4)eth.getPayload();
 
-        // Se verifica auth
-        boolean isAuthenticated = authenticationDao.verifyAuthentication(iPv4.getSourceAddress().toString(),
-                eth.getSourceMACAddress().toString());
+        System.out.println(eth);
+        System.out.println("estamos aqui");
 
-        if (!isAuthenticated) {
-            // no hace nada
-            return Command.STOP;
+        // MacAddress srcMac = eth.getSourceMACAddress();
+        // VlanVid vlanId = VlanVid.ofVlan(eth.getVlanID());
+
+        if (eth.getEtherType() == EthType.IPv4) {
+            /* We got an IPv4 packet; get the payload from Ethernet */
+            IPv4 ipv4 = (IPv4) eth.getPayload();
+
+            /* More to come here */
+            //boolean isAuthenticated = authenticationDao.verifyAuthentication(ipv4.getSourceAddress().toString(),
+                  //  eth.getSourceMACAddress().toString());
+
+            //if (String.valueOf(isAuthenticated).equals("false")) {
+                // no hace nada
+              //  return Command.STOP;
+            //}
+
+            String user = authorizationDao.getUserByIp(ipv4.getSourceAddress().toString());
+            String resourceId = authorizationDao.getResourceIdByIp(ipv4.getDestinationAddress().toString());
+            boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
+
+
+            if (String.valueOf(isAuthorized).equals("false")) {
+                return Command.STOP;
+            }
+
+            // TODO: implement
+            insertFlows();
+
         }
-
-        String user = authorizationDao.getUserByIp(iPv4.getSourceAddress().toString());
-        String resourceId = authorizationDao.getResourceIdByIp(iPv4.getDestinationAddress().toString());
-        boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
-
-        if (!isAuthorized) {
-            return Command.STOP;
-        }
-
-        // TODO: implement
-        insertFlows();
 
         return Command.CONTINUE;
     }
