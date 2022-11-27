@@ -18,9 +18,11 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "201899998";
         }
 
-        if(ip.equals("1.0.0.3")){
+        /*if(ip.equals("1.0.0.3")){
             return "20180074";
         }
+
+         */
         return null;
     }
 
@@ -31,9 +33,11 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "123456789";
         }
 
-        if (ip.equals("10.0.0.1")){
+        /*if (ip.equals("10.0.0.1")){
             return "20182162";
         }
+
+         */
         return null;
     }
 
