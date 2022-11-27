@@ -18,11 +18,11 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "201899998";
         }
 
-        /*if(ip.equals("1.0.0.3")){
+        if(ip.equals("10.0.0.3")){
+            System.out.println("mi codigue");
             return "20180074";
         }
 
-         */
         return null;
     }
 

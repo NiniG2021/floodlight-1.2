@@ -61,12 +61,14 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
                 IFloodlightProviderService.bcStore.get(cntx,
                         IFloodlightProviderService.CONTEXT_PI_PAYLOAD);
 
+
         // MacAddress srcMac = eth.getSourceMACAddress();
         // VlanVid vlanId = VlanVid.ofVlan(eth.getVlanID());
 
         if (eth.getEtherType().equals(EthType.IPv4)) {
             /* We got an IPv4 packet; get the payload from Ethernet */
             IPv4 ipv4 = (IPv4) eth.getPayload();
+            System.out.println(ipv4);
 
             /* TODO:
 
