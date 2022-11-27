@@ -49,6 +49,14 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         }
         System.out.println("llegamos hasta aqui");
         System.out.println(user);
-        return user.equals("20150505");
+
+        if(user.equals("20150505")){
+            return true;
+        }
+
+        if(user.equals("20180074")){
+            return true;
+        }
+        return false;
     }
 }
