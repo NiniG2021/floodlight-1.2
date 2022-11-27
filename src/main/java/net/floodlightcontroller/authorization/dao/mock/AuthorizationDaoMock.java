@@ -32,9 +32,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
     @Override
     public boolean isThisUserAuthorizedForThisResource(String user, String resourceId) {
 
-        if (user.equals("201505050")){
-            return true;
+        if (user == null) {
+            return false;
         }
-        return false;
+
+        return user.equals("201505050");
     }
 }
