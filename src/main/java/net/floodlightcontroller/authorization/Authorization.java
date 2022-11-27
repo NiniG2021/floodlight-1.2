@@ -23,6 +23,7 @@ import net.floodlightcontroller.packet.Ethernet;
 import org.projectfloodlight.openflow.types.EthType;
 import org.projectfloodlight.openflow.types.MacAddress;
 import org.projectfloodlight.openflow.types.VlanVid;
+import org.python.antlr.ast.Str;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,9 +64,15 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
         // MacAddress srcMac = eth.getSourceMACAddress();
         // VlanVid vlanId = VlanVid.ofVlan(eth.getVlanID());
 
-        if (eth.getEtherType().equals(EthType.IPv4)) {
+        if (eth.getEtherType().equals(EthType.IPv4) &&) {
             /* We got an IPv4 packet; get the payload from Ethernet */
             IPv4 ipv4 = (IPv4) eth.getPayload();
+
+            /* TODO:
+
+            if (not net 10.0.0.0/24)
+                return CONTINUE
+             */
 
             /* More to come here */
             //boolean isAuthenticated = authenticationDao.verifyAuthentication(ipv4.getSourceAddress().toString(),
@@ -76,8 +83,7 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
               //  return Command.STOP;
             //}
 
-            logger.info(String.format("ip_src: %s - ip_dst: %s ",
-                    ipv4.getSourceAddress().toString(), ipv4.getDestinationAddress().toString()));
+
 
             String user = authorizationDao.getUserByIp(ipv4.getSourceAddress().toString());
             String resourceId = authorizationDao.getResourceIdByIp(ipv4.getDestinationAddress().toString());
@@ -86,8 +92,11 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
 
             boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
 
+            logger.info(String.format("ip_src: %s - ip_dst: %s - isAuthorized: %s ",
+                    ipv4.getSourceAddress().toString(), ipv4.getDestinationAddress().toString(),
+                    isAuthorized));
 
-            if (String.valueOf(isAuthorized).equals("false")) {
+            if (!isAuthorized) {
                 return Command.STOP;
             }
 
