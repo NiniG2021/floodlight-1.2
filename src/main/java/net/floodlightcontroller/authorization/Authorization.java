@@ -96,6 +96,9 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
                     ipv4.getSourceAddress().toString(), ipv4.getDestinationAddress().toString(),
                     isAuthorized));
 
+
+
+
             if (!isAuthorized) {
                 return Command.STOP;
             }
