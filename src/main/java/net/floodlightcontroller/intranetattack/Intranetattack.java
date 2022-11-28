@@ -56,12 +56,12 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
 
 
             String userA = ipv4.getSourceAddress().toString();
-
+            System.out.println("llega aqui");
             ArrayList<String> listaipv4 = new ArrayList<>();
             System.out.println(listaipv4.size());
             int bandera = listaipv4.size();
             listaipv4.add(userA);
-
+            System.out.println(userA);
             for(int i = 0; i<=bandera; i++){
                 for(int j = 0; j<=bandera; j++){
                     if(listaipv4.get(i) == listaipv4.get(j)){
