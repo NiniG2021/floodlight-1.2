@@ -41,7 +41,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
 
     @Override
     public boolean isCallbackOrderingPostreq(OFType type, String name) {
-        return false;
+        return (type.equals(OFType.PACKET_IN) && (name.equals("forwarding")));
     }
 
     @Override
