@@ -37,6 +37,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             System.out.println("mi codigue x2");
             return "20182162";
         }
+        if (ip.equals("10.0.0.4")){
+            System.out.println("mi codigue x2");
+            return "20210726";
+        }
 
         return null;
     }
@@ -55,6 +59,9 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         }
 
         if(user.equals("20180074")){
+            return true;
+        }
+        if(user.equals("201899998")){
             return true;
         }
         return false;
