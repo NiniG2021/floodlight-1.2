@@ -5,7 +5,7 @@ import java.util.Map;
 import net.floodlightcontroller.packet.IPv4;
 import org.projectfloodlight.openflow.protocol.OFMessage;
 import org.projectfloodlight.openflow.protocol.OFType;
-import org.projectfloodlight.openflow.types.MacAddress;
+import org.projectfloodlight.openflow.types.EthType;
 
 import net.floodlightcontroller.core.FloodlightContext;
 import net.floodlightcontroller.core.IOFMessageListener;
@@ -50,10 +50,28 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
                 IFloodlightProviderService.bcStore.get(cntx,
                         IFloodlightProviderService.CONTEXT_PI_PAYLOAD);
         //se obtiene la ipv4 del
-        IPv4 iPv4 = (IPv4)eth.getPayload();
+        if (eth.getEtherType().equals(EthType.IPv4)) {
+            /* We got an IPv4 packet; get the payload from Ethernet */
+            IPv4 ipv4 = (IPv4) eth.getPayload();
 
-        Long sourceMACHash = eth.getSourceMACAddress().getLong();
 
+            String userA = ipv4.getSourceAddress().toString();
+
+            ArrayList<String> listaipv4 = new ArrayList<>();
+            System.out.println(listaipv4.size());
+            int bandera = listaipv4.size();
+            listaipv4.add(userA);
+
+            for(int i = 0; i<=bandera; i++){
+                for(int j = 0; j<=bandera; j++){
+                    if(listaipv4.get(i) == listaipv4.get(j)){
+                        System.out.println(listaipv4.get(i));
+                        System.out.println(listaipv4.get(j));
+                        return Command.STOP;
+                    }
+                }
+            }
+        }
         return Command.CONTINUE;
     }
 

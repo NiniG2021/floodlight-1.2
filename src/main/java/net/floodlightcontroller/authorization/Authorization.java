@@ -1,8 +1,6 @@
 package net.floodlightcontroller.authorization;
 
-import net.floodlightcontroller.authorization.dao.AuthenticationDao;
 import net.floodlightcontroller.authorization.dao.AuthorizationDao;
-import net.floodlightcontroller.authorization.dao.mock.AuthenticationDaoMock;
 import net.floodlightcontroller.authorization.dao.mock.AuthorizationDaoMock;
 import net.floodlightcontroller.core.FloodlightContext;
 import net.floodlightcontroller.core.IOFMessageListener;
@@ -21,9 +19,6 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Set;
 import net.floodlightcontroller.packet.Ethernet;
 import org.projectfloodlight.openflow.types.EthType;
-import org.projectfloodlight.openflow.types.MacAddress;
-import org.projectfloodlight.openflow.types.VlanVid;
-import org.python.antlr.ast.Str;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +29,6 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
     protected IFloodlightProviderService floodlightProvider;
     protected Set<Long> macAddresses;
     protected static Logger logger;
-
-    protected AuthenticationDao authenticationDao;
     protected AuthorizationDao authorizationDao;
 
     @Override
@@ -136,8 +129,6 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
         logger = LoggerFactory.getLogger(Authorization.class);
         // Para unit testing:
         authorizationDao = new AuthorizationDaoMock();
-        authenticationDao = new AuthenticationDaoMock();
-
 
         // Para implementacion:
         //authorizationDao = new AuthorizationDaoImpl();
