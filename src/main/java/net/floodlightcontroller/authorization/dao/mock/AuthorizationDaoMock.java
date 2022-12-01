@@ -42,6 +42,8 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "20210726";
         }
 
+
+
         return null;
     }
 
@@ -62,6 +64,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return true;
         }
         if(user.equals("201899998")){
+            return true;
+        }
+
+        if(user.equals("20188888")){
             return true;
         }
         return false;
