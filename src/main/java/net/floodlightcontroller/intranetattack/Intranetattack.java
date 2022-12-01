@@ -1,7 +1,8 @@
 package net.floodlightcontroller.intranetattack;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
+import net.floodlightcontroller.devicemanager.IDeviceService;
+import net.floodlightcontroller.devicemanager.internal.DeviceManagerImpl;
 import net.floodlightcontroller.packet.IPv4;
 import org.projectfloodlight.openflow.protocol.OFMessage;
 import org.projectfloodlight.openflow.protocol.OFType;
@@ -16,9 +17,9 @@ import net.floodlightcontroller.core.module.IFloodlightModule;
 import net.floodlightcontroller.core.module.IFloodlightService;
 
 import net.floodlightcontroller.core.IFloodlightProviderService;
-import java.util.ArrayList;
+
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.Set;
+
 import net.floodlightcontroller.packet.Ethernet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
     protected IFloodlightProviderService floodlightProvider;
     protected Set<Long> macAddresses;
     protected static Logger logger;
+    protected  IDeviceService deviceService ;
 
     @Override
     public String getName() {
@@ -66,7 +68,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
             System.out.println(userA);
             for(int i = 0; i<=bandera; i++){
                 for(int j = 0; j<=bandera; j++){
-                    if(listaipv4.get(i) == listaipv4.get(j)){
+                    if(Objects.equals(listaipv4.get(i), listaipv4.get(j))){
                         System.out.println("holiwis");
                         System.out.println(listaipv4.get(i));
                         System.out.println(listaipv4.get(j));
@@ -91,7 +93,9 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
 
     @Override
     public Collection<Class<? extends IFloodlightService>> getModuleDependencies() {
-        return null;
+        Collection<Class<? extends IFloodlightService>> l = new ArrayList<Class<? extends IFloodlightService>>();
+        l.add(IDeviceService.class);
+        return l;
     }
 
     @Override
@@ -99,6 +103,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
         floodlightProvider = context.getServiceImpl(IFloodlightProviderService.class);
         macAddresses = new ConcurrentSkipListSet<Long>();
         logger = LoggerFactory.getLogger(Intranetattack.class);
+        deviceService = context.getServiceImpl(IDeviceService.class);
     }
 
     @Override
