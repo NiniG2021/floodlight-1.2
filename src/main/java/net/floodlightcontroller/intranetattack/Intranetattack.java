@@ -61,6 +61,8 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
             System.out.println(listaipv4.size());
             int bandera = listaipv4.size();
             listaipv4.add(userA);
+            System.out.println("Cantidad de elementos: ");
+            System.out.println(listaipv4.size());
             System.out.println(userA);
             for(int i = 0; i<=bandera; i++){
                 for(int j = 0; j<=bandera; j++){
