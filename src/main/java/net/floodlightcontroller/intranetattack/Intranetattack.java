@@ -65,8 +65,10 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
             for(int i = 0; i<=bandera; i++){
                 for(int j = 0; j<=bandera; j++){
                     if(listaipv4.get(i) == listaipv4.get(j)){
+                        System.out.println("holiwis");
                         System.out.println(listaipv4.get(i));
                         System.out.println(listaipv4.get(j));
+                        System.out.println("bais");
                         return Command.STOP;
                     }
                 }
