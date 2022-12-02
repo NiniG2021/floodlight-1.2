@@ -60,10 +60,12 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
             MacAddress macAddress = eth.getSourceMACAddress();
 
 
-            for (Iterator<? extends IDevice> it = deviceService.queryDevices(macAddress, VlanVid.ZERO, IPv4Address.NONE, IPv6Address.NONE, DatapathId.NONE, OFPort.ZERO); it.hasNext(); ) {
+            for (Iterator<? extends IDevice> it = deviceService.queryDevices(macAddress, VlanVid.ZERO, ipv4.getSourceAddress(), IPv6Address.NONE, DatapathId.NONE, OFPort.ZERO); it.hasNext(); ) {
 
                 IDevice device = it.next();
                 for (IPv4Address i : device.getIPv4Addresses()){
+                    System.out.println(ipv4.getSourceAddress());
+
                     if(i!=ipv4.getSourceAddress()){
                         return Command.STOP;
                     }
