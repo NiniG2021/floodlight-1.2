@@ -1,8 +1,6 @@
 package net.floodlightcontroller.authorization;
 
-import net.floodlightcontroller.authorization.dao.AuthenticationDao;
 import net.floodlightcontroller.authorization.dao.AuthorizationDao;
-import net.floodlightcontroller.authorization.dao.mock.AuthenticationDaoMock;
 import net.floodlightcontroller.authorization.dao.mock.AuthorizationDaoMock;
 import net.floodlightcontroller.core.FloodlightContext;
 import net.floodlightcontroller.core.IOFMessageListener;
@@ -20,6 +18,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.Set;
 import net.floodlightcontroller.packet.Ethernet;
+import org.projectfloodlight.openflow.types.EthType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +29,12 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
     protected IFloodlightProviderService floodlightProvider;
     protected Set<Long> macAddresses;
     protected static Logger logger;
-
-    protected AuthenticationDao authenticationDao;
     protected AuthorizationDao authorizationDao;
 
     @Override
     public String getName() {
-        return "Authorization";
+        System.out.printf("entro a authorization");
+        return "authorization";
     }
 
     @Override
@@ -46,7 +44,7 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
 
     @Override
     public boolean isCallbackOrderingPostreq(OFType type, String name) {
-        return false;
+        return (type.equals(OFType.PACKET_IN) && (name.equals("forwarding")));
     }
 
     @Override
@@ -55,27 +53,53 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
         Ethernet eth =
                 IFloodlightProviderService.bcStore.get(cntx,
                         IFloodlightProviderService.CONTEXT_PI_PAYLOAD);
-        IPv4 iPv4 = (IPv4)eth.getPayload();
 
-        // Se verifica auth
-        boolean isAuthenticated = authenticationDao.verifyAuthentication(iPv4.getSourceAddress().toString(),
-                eth.getSourceMACAddress().toString());
 
-        if (!isAuthenticated) {
-            // no hace nada
-            return Command.STOP;
+        // MacAddress srcMac = eth.getSourceMACAddress();
+        // VlanVid vlanId = VlanVid.ofVlan(eth.getVlanID());
+
+        if (eth.getEtherType().equals(EthType.IPv4)) {
+            /* We got an IPv4 packet; get the payload from Ethernet */
+            IPv4 ipv4 = (IPv4) eth.getPayload();
+            System.out.println(ipv4);
+
+            /* TODO:
+
+            if (not net 10.0.0.0/24)
+                return CONTINUE
+             */
+
+            /* More to come here */
+            //boolean isAuthenticated = authenticationDao.verifyAuthentication(ipv4.getSourceAddress().toString(),
+                  //  eth.getSourceMACAddress().toString());
+
+            //if (String.valueOf(isAuthenticated).equals("false")) {
+                // no hace nada
+              //  return Command.STOP;
+            //}
+
+
+
+            String user = authorizationDao.getUserByIp(ipv4.getSourceAddress().toString());
+            String resourceId = authorizationDao.getResourceIdByIp(ipv4.getDestinationAddress().toString());
+
+            logger.info(String.format("user: %s - resourceId: %s ", user, resourceId));
+
+            boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
+
+            logger.info(String.format("ip_src: %s - ip_dst: %s - isAuthorized: %s ",
+                    ipv4.getSourceAddress().toString(), ipv4.getDestinationAddress().toString(),
+                    isAuthorized));
+
+            if (!isAuthorized) {
+                System.out.println(!isAuthorized);
+                return Command.STOP;
+            }
+
+            // TODO: implement
+            insertFlows();
+
         }
-
-        String user = authorizationDao.getUserByIp(iPv4.getSourceAddress().toString());
-        String resourceId = authorizationDao.getResourceIdByIp(iPv4.getDestinationAddress().toString());
-        boolean isAuthorized = authorizationDao.isThisUserAuthorizedForThisResource(user, resourceId);
-
-        if (!isAuthorized) {
-            return Command.STOP;
-        }
-
-        // TODO: implement
-        insertFlows();
 
         return Command.CONTINUE;
     }
@@ -105,8 +129,6 @@ public class Authorization implements IOFMessageListener, IFloodlightModule {
         logger = LoggerFactory.getLogger(Authorization.class);
         // Para unit testing:
         authorizationDao = new AuthorizationDaoMock();
-        authenticationDao = new AuthenticationDaoMock();
-
 
         // Para implementacion:
         //authorizationDao = new AuthorizationDaoImpl();
