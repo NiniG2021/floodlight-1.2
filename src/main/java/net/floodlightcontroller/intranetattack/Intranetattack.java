@@ -217,17 +217,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
                     }
                 }
             }
-            //Si no hay coincidencia, se envia una alerta
-            if (ipFound && !sameDevice) {
-                hostBlocked.add(eth.getSourceMACAddress());
-                System.out.println("###### ALERTA: IP SPOOFING DETECTADO ######");
-                System.out.println("---- Informacion del atacante: ----");
-                System.out.println("ip source: " + ipSource);
-                System.out.println("mac source: " + macSource);
-                System.out.println("---- HOST SUPLANTADO ----");
-                System.out.println("ip: " + ipDeviceVulnerado);
-                System.out.println("mac: " + macDeviceVulnerado);
-            }
+
         }
     }
 
