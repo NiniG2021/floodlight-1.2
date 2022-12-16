@@ -13,10 +13,12 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "20188888";
         }
 
-
+/*
         if (ip.equals("10.0.0.4")){
             return "201899998";
         }
+
+ */
 
         if(ip.equals("10.0.0.3")){
             System.out.println("mi codigue");
@@ -37,10 +39,12 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             System.out.println("mi codigue x2");
             return "20182162";
         }
-        if (ip.equals("10.0.0.4")){
+       /* if (ip.equals("10.0.0.4")){
             System.out.println("mi codigue x2");
             return "20210726";
         }
+
+        */
 
 
 
