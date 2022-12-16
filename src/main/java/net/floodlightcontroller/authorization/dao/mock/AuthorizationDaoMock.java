@@ -13,6 +13,24 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "20188888";
         }
 
+        if (ip.equals("192.168.200.202")){
+            return "20180000";
+        }
+
+        if (ip.equals("192.168.200.204")){
+            return "20180001";
+        }
+        if (ip.equals("192.168.200.201")){
+            return "20180002";
+        }
+        if (ip.equals("192.168.200.200")){
+            return "15122022";
+        }
+
+
+
+
+
 /*
         if (ip.equals("10.0.0.4")){
             return "201899998";
@@ -72,6 +90,19 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         if(user.equals("20188888")){
             return true;
         }
+        if(user.equals("20180000")){
+            return true;
+        }
+        if(user.equals("20180001")){
+            return true;
+        }
+        if(user.equals("20180002")){
+            return true;
+        }
+        if(user.equals("15122022")){
+            return true;
+        }
+
         return false;
     }
 }
