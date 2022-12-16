@@ -26,12 +26,12 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         if (ip.equals("192.168.200.200")){
             return "15122022";
         }
-/*
+
         if (ip.equals("10.0.0.4")){
-            return "201899998";
+            return "20189999";
         }
 
- */
+
 
         if(ip.equals("10.0.0.3")){
             System.out.println("mi codigue");
@@ -57,6 +57,11 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return "20210726";
         }
 
+        if(ip.equals("10.0.0.4")){
+            return  "20210727";
+        }
+
+
         return null;
     }
 
@@ -70,6 +75,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
         if(user.equals("20150505")&&resourceId.equals("20210726")){
             return true;
         }
+        if(user.equals("20150505")&&resourceId.equals("20210727")){
+            return true;
+        }
+
 
         if(user.equals("20150505")&&resourceId.equals("12345678")){
             return true;
@@ -79,6 +88,10 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return true;
         }
         if(user.equals("20188888")&&resourceId.equals("20182162")){
+            return true;
+        }
+
+        if(user.equals("20189999")&&resourceId.equals("20182162")){
             return true;
         }
 
