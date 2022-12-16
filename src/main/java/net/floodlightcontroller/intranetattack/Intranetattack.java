@@ -166,9 +166,9 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
         if (!hostBlocked.contains(eth.getSourceMACAddress())) {
             detectorIpSpoofing(eth);
         }
-        if (!hostBlocked.contains(eth.getSourceMACAddress())) {
-            portScanning(eth);
-        }
+//        if (!hostBlocked.contains(eth.getSourceMACAddress())) {
+//            portScanning(eth);
+//        }
         if (!hostBlocked.contains(eth.getSourceMACAddress())) {
             ret = Command.CONTINUE;
         }
@@ -185,62 +185,7 @@ public class Intranetattack implements IOFMessageListener, IFloodlightModule{
 
 
     //realizamos codigo para Port scanning
-    protected void portScanning(Ethernet eth) {
-        //vemos que protocolo sigue,si es IPv4 y TCP analizando su carga util
-
-        if (eth.getEtherType().equals(EthType.IPv4)) {
-            IPv4 ip = (IPv4) eth.getPayload();
-            if (ip.getProtocol().equals(IpProtocol.TCP)) {
-                TCP tcp = (TCP) ip.getPayload();
-
-                //Caso TCP SYN
-                if (tcp.getFlags() == (short) 0x02) {
-                    IPv4Address ipDestino = ip.getDestinationAddress();
-                    if (hostsConsultados.get(ipDestino) == null) {
-                        Host newHost = new Host();
-                        hostsConsultados.put(ipDestino, newHost);
-                    }
-                    Host hostConsultado = hostsConsultados.get(ipDestino);
-
-
-                    //Se verifica si la MAC origen esta en el MAP de los contadores SYN
-                    MacAddress sourceMac = eth.getSourceMACAddress();
-                    if (!(hostConsultado.getMapSynRequests().get(sourceMac) == null)) {
-                        //Se añade el puerto consultado
-
-                        hostConsultado.getMapSynRequests().get(sourceMac).add(tcp.getDestinationPort().getPort());
-
-
-                        //Vemos si sta dentro de la ventana de los analisis
-                        Long startTime = hostConsultado.getMapMacTime().get(sourceMac);
-                        double timeDifSec = ((System.nanoTime() - startTime) * 1.0 / 1000000) / MILLIS_PER_SEC;
-                        if (timeDifSec < thresholdTime) {
-                            //verificamos si longitud(SYN)-longitud(SYN-ACK)> THRESHOLD
-                            if (hostConsultado.getMapSynRequests().get(sourceMac).size() > thresholdCantPorts) {
-                                hostBlocked.add(sourceMac);
-                                System.out.println("###### ALERTA : PORT SCANNING DETECTADO ######");
-                                System.out.println("---- Informacion del atacante ----");
-                                System.out.println("mac source: " + sourceMac);
-                            }
-                        } else {
-                            //Si no esta en nuestra ventana de analisis,lo quitamos del map
-                            hostConsultado.getMapSynRequests().remove(sourceMac);
-                        }
-                    } else {
-
-                        // Si no está, agregarlo al map de contadores SYN, SYN-ACK y al de tiempo (con la hora actual)
-                        //TODO: FALTA AL SYN-ACK
-                        ArrayList<Integer> lp = new ArrayList<>();
-                        lp.add(tcp.getDestinationPort().getPort());
-                        hostConsultado.getMapSynRequests().put(sourceMac, lp);
-
-                        hostConsultado.getMapMacTime().put(sourceMac, System.nanoTime());
-                    }
-                }
-
-            }
-        }
-    }
+   //----------
 
     protected void detectorIpSpoofing(Ethernet eth) {
         String ipDeviceVulnerado = "";
