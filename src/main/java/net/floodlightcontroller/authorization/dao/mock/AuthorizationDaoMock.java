@@ -45,7 +45,7 @@ public class AuthorizationDaoMock implements AuthorizationDao {
     public String getResourceIdByIp(String ip) {
 
         if (ip.equals("10.0.0.3")){
-            return "123456789";
+            return "12345678";
         }
 
         if (ip.equals("10.0.0.1")){
@@ -67,18 +67,20 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return false;
         }
 
-        if(user.equals("20150505")){
+        if(user.equals("20150505")&&resourceId.equals("20210726")){
             return true;
         }
 
-        if(user.equals("20180074")){
-            return true;
-        }
-      /*  if(user.equals("201899998")){
+        if(user.equals("20150505")&&resourceId.equals("12345678")){
             return true;
         }
 
-       */
+        if(user.equals("20180074")&&resourceId.equals("20182162")){
+            return true;
+        }
+        if(user.equals("20188888")&&resourceId.equals("20182162")){
+            return true;
+        }
 
        /* if(user.equals("20188888")){
             return true;
