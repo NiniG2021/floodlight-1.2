@@ -95,6 +95,14 @@ public class AuthorizationDaoMock implements AuthorizationDao {
             return true;
         }
 
+        if(user.equals("20180074")&&resourceId.equals("20210727")){
+            return true;
+        }
+
+        if(user.equals("20189999")&&resourceId.equals("12345678")){
+            return true;
+        }
+
        /* if(user.equals("20188888")){
             return true;
         }
